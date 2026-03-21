@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>TON Airdrop Mini App</title>
+  <style>
+    body {
+      background: #0d0d0d;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      margin-top: 60px;
+    }
+    .logo {
+      width: 120px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    #points {
+      font-size: 20px;
+      margin: 15px 0;
+    }
+    button {
+      padding: 12px 24px;
+      background: #00ffcc;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      margin: 10px;
+    }
+    #refInfo {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- TON logosunu repo'ya ekle: ton-logo.png -->
+    <img src="ton-logo.png" alt="TON Logo" class="logo">
+    <h1>TON Airdrop</h1>
+    <p id="points">Puan: 0</p>
+    <button id="boostBtn">🚀 Boost Yap</button>
+    <button id="shareBtn">🔗 Referans Linki Al</button>
+    <p id="refInfo"></p>
+  </div>
+
+  <script>
+    let points = 0;
+    const boostBtn = document.getElementById("boostBtn");
+    const shareBtn = document.getElementById("shareBtn");
+    const pointsEl = document.getElementById("points");
+    const refInfo = document.getElementById("refInfo");
+
+    // Boost özelliği
+    boostBtn.addEventListener("click", () => {
+      points++;
+      pointsEl.innerText = "Puan: " + points;
+    });
+
+    // Referans parametresi yakala
+    const urlParams = new URLSearchParams(window.location.search);
+    const ref = urlParams.get("ref");
+    if(ref){
+      refInfo.innerText = "Referans: " + ref;
+    }
+
+    // Referans linki oluştur
+    shareBtn.addEventListener("click", () => {
+      const myRef = "user123"; // Burada Telegram WebApp ile gerçek userID çekebilirsin
+      const refLink = window.location.origin + window.location.pathname + "?ref=" + myRef;
+      navigator.clipboard.writeText(refLink).then(() => {
+        alert("Referans linkin kopyalandı: " + refLink);
+      });
+    });
+  </script>
+</body>
+</html>
