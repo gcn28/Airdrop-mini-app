@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Tap Game</title>
+</head>
+<body style="background:black;color:white;text-align:center;">
+<h1>Tap Game</h1>
+<h2 id="score">0</h2>
+<button onclick="tap()" style="font-size:30px;">TAP</button>
+
+<script>
+let score=0;
+function tap(){
+  score++;
+  document.getElementById("score").innerText=score;
+}
+</script>
+</body>
+</html>
