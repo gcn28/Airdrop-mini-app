@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Tap to Earn - Tam Ekran</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <style>
+    body {
+      font-family:'Segoe UI';
+      background:#203a43;
+      color:#fff;
+      margin:0;
+      padding:0;
+      text-align:center;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    section {flex:1;overflow:auto;padding:20px;}
+    .hidden {display:none;}
+    .logo {width:260px;height:260px;margin:20px auto;cursor:pointer;}
+    svg {width:100%;height:100%;fill:#00aaff;}
+    #score {font-size:32px;margin:15px;}
+    .backBtn {
+      display:block;
+      margin:10px auto;
+      padding:15px 25px;
+      font-size:20px;
+      background:#ff4444;
+      color:#fff;
+      border:none;
+      border-radius:10px;
+    }
+    .menuBar {
+      background:#1c1c1c;
+      display:flex;
+      justify-content:space-around;
+      padding:15px 0;
+    }
+    .menuItem {
+      flex:1;
+      font-size:20px;
+      padding:15px;
+      color:#fff;
+      cursor:pointer;
+    }
+    .menuItem:hover {background:#333;}
+    .panelBox {background:rgba(255,255,255,0.1);margin:10px;padding:10px;border-radius:8px;}
+  </style>
+</head>
+<body>
+  <!-- Ana ekran -->
+  <section id="mainScreen">
+    <div class="logo" id="logo">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2C7 2 2 7 2 12c0 5 5 10 10 10s10-5 10-10c0-5-5-10-10-10zm0 3c3.9 0 7 3.1 7 7s-3.1 7-7 7-7-3.1-7-7 3.1-7 7-7zm0 2l-4 7h8l-4-7z"/>
+      </svg>
+    </div>
+    <h1>Tap to Earn</h1>
+    <div id="score">Puan: 0</div>
+  </section>
+
+  <!-- Cüzdan -->
+  <section id="walletSection" class="hidden">
+    <button class="backBtn" onclick="goTo('mainScreen')">⬅️ Geri</button>
+    <h2>💳 Cüzdan Bağla</h2>
+    <input type="text" id="walletAddress" placeholder="Toncoin adresi">
+    <button onclick="connectWallet()">Bağla</button>
+    <p id="walletStatus"></p>
+  </section>
+
+  <!-- Çekim -->
+  <section id="withdrawSection" class="hidden">
+    <button class="backBtn" onclick="goTo('mainScreen')">⬅️ Geri</button>
+    <h2>💰 Çekim Talebi</h2>
+    <p>Her 25.000 puan = 0.1 TON</p>
+    <button onclick="requestWithdraw()">Çekim Talebi Oluştur</button>
+    <p id="withdrawStatus"></p>
+  </section>
+
+  <!-- Admin giriş -->
+  <section id="adminLogin" class="hidden">
+    <button class="backBtn" onclick="goTo('mainScreen')">⬅️ Geri</button>
+    <h2>🔑 Admin Giriş</h2>
+    <input type="password" id="adminPass" placeholder="Şifre">
+    <button onclick="checkAdmin()">Devam Et</button>
+  </section>
+
+  <!-- Admin panel -->
+  <section id="adminPanel" class="hidden">
+    <button class="backBtn" onclick="goTo('mainScreen')">⬅️ Geri</button>
+    <h2>👑 Admin Paneli</h2>
+    <div class="panelBox"><h3>Mesajlar</h3><div id="adminMessages"></div></div>
+    <div class="panelBox"><h3>Cüzdanlar</h3><div id="adminWallets"></div></div>
+    <div class="panelBox"><h3>Çekim Talepleri</h3><div id="adminWithdraws"></div></div>
+  </section>
+
+  <!-- Alt sabit menü -->
+  <div class="menuBar">
+    <div class="menuItem" onclick="goTo('walletSection')">💳 Cüzdan</div>
+    <div class="menuItem" onclick="goTo('withdrawSection')">💰 Çekim</div>
+    <div class="menuItem" onclick="goTo('adminLogin')">🔑 Admin</div>
+  </div>
+
+<script>
+  let score = 0;
+  const logo = document.getElementById("logo");
+  logo.addEventListener("click", () => {score++;updateScore();});
+  logo.addEventListener("touchstart", (e) => {score+=e.touches.length;updateScore();});
+
+  function goTo(sectionId){
+    let sections = ["mainScreen","walletSection","withdrawSection","adminLogin","adminPanel"];
+    sections.forEach(id => document.getElementById(id).classList.add("hidden"));
+    document.getElementById(sectionId).classList.remove("hidden");
+  }
+
+  function connectWallet(){
+    let addr=document.getElementById("walletAddress").value.trim();
+    if(addr){
+      document.getElementById("walletStatus").innerText="Bağlı cüzdan: "+addr;
+      let div=document.createElement("div");div.innerText=addr;
+      document.getElementById("adminWallets").appendChild(div);
+    }
+  }
+
+  function requestWithdraw(){
+    if(score>=25000){
+      score-=25000;updateScore();
+      let div=document.createElement("div");div.innerText="0.1 TON çekim talebi";
+      document.getElementById("adminWithdraws").appendChild(div);
+      document.getElementById("withdrawStatus").innerText="Talep admin paneline iletildi.";
+    } else {alert("Yeterli puanın yok!");}
+  }
+
+  function checkAdmin(){
+    let pass=document.getElementById("adminPass").value;
+    if(pass==="5131626696_Frk"){goTo("adminPanel");} else {alert("Şifre yanlış!");}
+  }
+
+  function updateScore(){document.getElementById("score").innerText="Puan: "+score;}
+</script>
+</body>
+</html>
